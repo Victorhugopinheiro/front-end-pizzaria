@@ -1,0 +1,39 @@
+.container{
+    width: 100%;
+}
+
+.content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0px 6px;
+
+    nav{
+        display: flex;
+        align-items: center;
+        gap: 22px;
+
+        a{
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.4s;
+
+            &:hover{
+                transform: scale(1.05);
+            }
+        }
+
+
+        button{
+            background-color: transparent;
+            color: var(--white);
+            border: 0;
+            transition: all 0.4s;
+            &:hover{
+                transform: scale(1.05);
+            }
+        }
+    }
+}
