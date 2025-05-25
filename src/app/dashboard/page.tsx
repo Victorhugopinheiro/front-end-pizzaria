@@ -7,12 +7,15 @@ async function GetOrders(): Promise<OrdersOpen[] | []> {
 
     const token = await getCookieServer()
 
+
     try {
-        const response = await api.get("orders", {
+        const response = await api.get("/orders", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
+
+        
 
         return response.data || []
 

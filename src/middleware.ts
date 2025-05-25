@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCookieServer } from "./lib/cookieServer";
 import { api } from "./service/api";
+import { deleteCookie } from "cookies-next";
 
 
 
@@ -10,11 +11,25 @@ export async function middleware(req: NextRequest) {
 
     const { pathname } = req.nextUrl
 
-    if (pathname.startsWith("/_next") || pathname === "/") {
+    const token = await getCookieServer()
+
+
+
+    if (pathname === "/") {
+
+        if (token) {
+            const validate = await validateToken(token)
+
+            if(validate){
+                return NextResponse.redirect(new URL("/dashboard", req.url))
+            }
+        }
+    }
+
+    if (pathname.startsWith("/_next")) {
         NextResponse.next()
     }
 
-    const token = await getCookieServer()
 
     if (pathname.startsWith("/dashboard")) {
         if (!token) {
@@ -39,8 +54,8 @@ export async function middleware(req: NextRequest) {
 }
 
 
-async function validateToken(token: string ) {
-    if(!token) return false
+async function validateToken(token: string) {
+    if (!token) return false
 
     try {
         await api.get("/me", {

@@ -12,31 +12,32 @@ interface ActionsOrder {
     isOpen: boolean,
     detailOrder: OrderProps[],
     finishPedido: (order_id: string) => Promise<void>,
-    totalPedido: (order:OrderProps[]) => number
+    totalPedido: (order: OrderProps[]) => number
 }
 
-interface OrderProps{
-    
-		id:string,
-		amount: 6,
-		order_id: string,
-		product_id: string,
-		product: {
-			id: string,
-			name: string,
-			price: string,
-			description: string,
-			banner: string,
-		
-			category_id: string
-		},
-		order: {
-			id: string,
-			table: 11,
-			status: boolean,
-			draft: boolean,
-			name: string,}
-		
+interface OrderProps {
+
+    id: string,
+    amount: 6,
+    order_id: string,
+    product_id: string,
+    product: {
+        id: string,
+        name: string,
+        price: string,
+        description: string,
+        banner: string,
+
+        category_id: string
+    },
+    order: {
+        id: string,
+        table: 11,
+        status: boolean,
+        draft: boolean,
+        name: string,
+    }
+
 }
 
 
@@ -48,44 +49,47 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     const router = useRouter()
 
     const [isOpen, setIsOpen] = useState(false)
-    const [detailOrder, setDetailOrder] = useState<OrderProps[]>([])
+    const [detailOrder, setDetailOrder] = useState<OrderProps[] | []>([])
 
     function closeModal() {
         setIsOpen(false)
     }
 
     async function openModal(order_id: string) {
-       
-        
-        const token = getCookieClient()
-        const response = await api.get("order/detail",{
-            headers:{
-                Authorization: `Bearer ${token}`
-            },
 
-            params:{
-                order_id:order_id
-            }
-        })
 
-        setDetailOrder(response.data)
+        try {
+            const token = await getCookieClient()
+            const response = await api.get("/order/detail",{
+                headers:{
+                    Authorization:`Bearer ${token}`
+                },
+                params:{order_id: order_id}
+            })
 
-        setIsOpen(true)
+            setDetailOrder(response.data)
+
+            setIsOpen(true)
+        }catch(err){
+            console.log(err)
+        }
+
+
 
     }
 
 
-    async function finishPedido(order_id:string){
+    async function finishPedido(order_id: string) {
 
-        const token = getCookieClient()
+        const token = await getCookieClient()
 
         const data = {
-            order_id:order_id
+            order_id: order_id
         }
 
 
-        const response = await api.put("/order/finish", data,{
-            headers:{
+        const response = await api.put("/order/finish", data, {
+            headers: {
                 Authorization: `Bearer ${token}`
             }
         })
@@ -94,7 +98,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         closeModal()
     }
 
-    function totalPedido(order:OrderProps[]){
+    function totalPedido(order: OrderProps[]) {
 
         return order.reduce((total, item) => {
             const totalPedido = parseFloat(item.product.price) * item.amount
@@ -105,11 +109,11 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     }
 
 
-    
 
- 
 
-   
+
+
+
 
 
     return (

@@ -45,12 +45,15 @@ export default function Page(){
     })
 
 
-    console.log(data.data)
+    console.log(data.data.token)
+
+
+    redirect("/dashboard")
    }catch(err){
     console.log(err)
    }
 
-    redirect("/dashboard")
+    
   }
 
   return(

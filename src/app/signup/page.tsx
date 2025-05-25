@@ -21,14 +21,10 @@ export default function Signup() {
         }
 
         try {
-            await api.post("/users", {
+            await api.post("/users",{
                 name: name,
                 email: email,
                 password: password
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
             });
 
         } catch (err) {
@@ -46,7 +42,7 @@ export default function Signup() {
             <section className={style.content}>
                 <h1 className={style.h1Singup}>Criando sua conta</h1>
                 <form action={handleRegister}>
-                    <input type="text" name="name" required placeholder="Digite sua senha" />
+                    <input type="text" name="name" required placeholder="Digite seu nome" />
 
                     <input type="email" name="email" required placeholder="Digite seu email" />
 

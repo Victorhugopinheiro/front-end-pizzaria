@@ -1,8 +1,9 @@
 import { getCookie } from "cookies-next";
 
-export function getCookieClient() {
+export async function getCookieClient() {
     
-    const token = getCookie("session")
+    const token = await getCookie("session")
 
     return token
 }
+
